@@ -1,16 +1,16 @@
-#include "Position.h"
+#include "GameCore.h"
 
 void Position_init(Position *pos){
     for(int x = 0; x < WIDTH; x++){
         pos->height[x] = 0;
         for(int y = 0; y < HEIGHT; y++){
-            pos->height[y] = 0;
+            pos->board[x][y] = 0;
         }
     }
     pos->moves = 0;
 }
 
-bool Position_check(Position *pos, int col){
+bool Position_canPlay(Position *pos, int col){
     return pos->height[col] < HEIGHT;
 }
 
@@ -27,7 +27,7 @@ unsigned int Position_playSequence(Position *pos, const char *seq){
         int col = seq[i]- '1';
 
         //checks for invalid moves;
-        if(col < 0 || col >= WIDTH || !Position_check(pos, col) ||
+        if(col < 0 || col >= WIDTH || !Position_canPlay(pos, col) ||
          Position_isWinningMove(pos, col)){
             return i;
         }
@@ -39,7 +39,7 @@ unsigned int Position_playSequence(Position *pos, const char *seq){
 
 bool Position_isWinningMove(const Position *pos, int col){
     int current_player = 1 + (pos->moves % 2);
-    int row = pos->height -1  ;
+    int row = pos->height[col] - 1; 
 
     //Vertical check
     if(row >= 3 && pos->board[col][row] == current_player && pos->board[col][row -1] == current_player
@@ -66,10 +66,9 @@ bool Position_isWinningMove(const Position *pos, int col){
         if (nb >= 3) {
             return true;
         }
-
-        return false;
     }
     
+    return false;
 }
 
 

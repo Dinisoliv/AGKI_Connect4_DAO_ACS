@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "Position.h"
+#include "config.h"
+#include "GameCore.h"
 #include "negamax.h"
-#include "timeUtil.h"
 
 int main(void){
 
@@ -21,11 +21,11 @@ int main(void){
         if(Position_playSequence(&P, line) != strlen(line)) {
             fprintf(stderr, "Line %d: Invalid move %u \"%s\"\n", l, Position_nbMoves(&P), line);
         }else{
-            //start Timer
+            double start = cpu_time();
             int score = Solver_solve(&solver, &P);
-            //end Timer
+            double end = cpu_time();
 
-            printf("%s %d %llu ", line, score, Solver_getNodeCount(&solver) /*, start-end times*/); //falta um %llu
+            printf("%s %d %llu %d", line, score, Solver_getNodeCount(&solver), start-end);
         }
 
         printf("\n");
@@ -33,4 +33,26 @@ int main(void){
     }
     
     return 0;
+}
+
+int main(void){
+    Solver solver;
+    Solver_init(&solver);
+
+    while(true){
+
+        Position P;
+        Position_init(&P);
+
+        if(ALG == "negamax"){
+
+        }else if(ALG == "alpha-beta"){
+
+        }else if(ALG == "other"){
+            
+        }else{
+            fprintf(stderr, "Not a valid algorithm.");
+            break;
+        }
+    }
 }
