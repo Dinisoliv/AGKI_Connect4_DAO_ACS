@@ -1,5 +1,5 @@
-#ifndef CONNECT4_SOLVER_H
-#define CONNECT4_SOLVER_H
+#ifndef CONNECT4_WRAPPER_H
+#define CONNECT4_WRAPPER_H
 
 #include <stdint.h>
 
@@ -7,25 +7,22 @@
 extern "C" {
 #endif
 
-// opaque handle
 typedef void* c4_position_t;
 
-// lifecycle
-c4_position_t c4_create();
+/* lifecycle */
+c4_position_t c4_create(void);
 void c4_destroy(c4_position_t pos);
 
-// gameplay
-int c4_can_play(c4_position_t pos, int col);
+/* gameplay */
+int  c4_can_play(c4_position_t pos, int col);
 void c4_play(c4_position_t pos, int col);
 
-// solver
+/* solver */
 int c4_best_move(c4_position_t pos);
-
-// optional evaluation
 int c4_solve(c4_position_t pos);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* CONNECT4_WRAPPER_H */
