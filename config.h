@@ -2,23 +2,13 @@
 #define CONFIG_H
 
 
-typedef enum {
-    ALG_NEGAMAX,
-    ALG_NEGAMAX_AB
-    ALG_NEGAMAX_ID  //interactive deepenning
-} Algorithm;
+#define DEPTH 10
 
-typedef enum {
-    OPP_RANDOM,
-    OPP_GREEDY,
-    OPP_NEGAMAX
-} OpponentType;
+#define random 1
+#define OPPONENT random 
 
-typedef struct {
-    Algorithm alg;
-    int depth;
-    OpponentType p1;
-    OpponentType p2;
-} Config;
+#define negamax 1
+#define ALG negamax 
+
 
 #endif

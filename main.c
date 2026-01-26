@@ -3,56 +3,62 @@
 #include "config.h"
 #include "GameCore.h"
 #include "negamax.h"
+#include "random.h"
 
-int main(void){
+int main(void) {
 
+    Position pos;
     Solver solver;
+    
+    Position_init(&pos);
     Solver_init(&solver);
 
-    char line[256];
-    int l = 1;
+    srand((unsigned int)time(NULL)); // Inicializes the rand function
+    //metrics_reset();
 
-    while(fgets(line, sizeof(line), stdin)){
-        line[strcspn(line, "\n")] = 0;
+    while (1) {
+        int move;
 
-        Position P;
-        Position_init(&P);
+        if(Position_nbMoves(&pos) %2 == 0){
 
-        if(Position_playSequence(&P, line) != strlen(line)) {
-            fprintf(stderr, "Line %d: Invalid move %u \"%s\"\n", l, Position_nbMoves(&P), line);
+            if (ALG == negamax){
+                move =  negamax_move(&solver, &pos, DEPTH);
+            }else{
+                //add others;
+                printf("not a valid algorithm");
+                break;
+            }
+
         }else{
-            double start = cpu_time();
-            int score = Solver_solve(&solver, &P);
-            double end = cpu_time();
-
-            printf("%s %d %llu %d", line, score, Solver_getNodeCount(&solver), start-end);
+            if(OPPONENT == random){
+                move = random_move(&pos);
+            }else{
+                //add others
+                printf("not a valid opponent");
+                break;
+            }
         }
 
-        printf("\n");
-        l++;
-    }
-    
-    return 0;
-}
+        if (!Position_canPlay(&pos, move)) {
+            fprintf(stderr, "Invalid move %d\n", move);
+            break;
+        }
 
-int main(void){
-    Solver solver;
-    Solver_init(&solver);
+        Position_play(&pos, move);
 
-    while(true){
-
-        Position P;
-        Position_init(&P);
-
-        if(ALG == "negamax"){
-
-        }else if(ALG == "alpha-beta"){
-
-        }else if(ALG == "other"){
-            
-        }else{
-            fprintf(stderr, "Not a valid algorithm.");
+        if (Position_checkWin(&pos, move)) {
+            printf("Player %d wins!\n", 1 + ((pos.moves - 1) % 2));
+            break;
+        }
+        else if (Position_nbMoves(&pos) == WIDTH * HEIGHT) {
+            printf("Draw!\n");
             break;
         }
     }
+
+    //Metrics m = metrics_get();
+    printf("Nodes expanded: %lld\n", m.nodes_expanded);
+    printf("Time: %.2f ms\n", m.time_ms);
+
+    return 0;
 }
