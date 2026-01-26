@@ -1,5 +1,5 @@
-#ifndef POSITION_H
-#define POSITION_H
+#ifndef GAMECORE_H
+#define GAMECORE_H
 
 #include <stdbool.h>
 
@@ -16,7 +16,7 @@ typedef struct {
 void Position_init(Position *pos);
 
 //checks if a collum is playable
-bool Position_check(Position *pos, int col);
+bool Position_canPlay(Position *pos, int col);
 
 /* Play a column (assumes playable & non-winning) */
 void Position_play(Position *pos, int col);

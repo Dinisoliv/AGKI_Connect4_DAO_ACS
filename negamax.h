@@ -1,7 +1,7 @@
 #ifndef NEGAMAX_H
 #define NEGAMAX_H
 
-#include "position.h"
+#include "GameCore.h"
 
 typedef struct {
     unsigned long long nodeCount;
@@ -10,7 +10,7 @@ typedef struct {
 
 void Solver_init(Solver *solver);//inicializes the solver structure
 
-int  Solver_solve(Solver *solver, const Position *P); //runs the algorithm/solver
+int  Solver_solve(Solver *solver, const Position *P, int depth); //runs the algorithm/solver
 
 unsigned long long Solver_getNodeCount(const Solver *solver); // get function for nodeCount
 
