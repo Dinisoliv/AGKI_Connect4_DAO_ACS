@@ -1,0 +1,6 @@
+Wrapper for Perfect bot:
+g++ -O3 -c Position.cpp Solver.cpp connect4_solver.cpp
+ar rcs libconnect4.a Position.o Solver.o connect4_solver.o
+
+Solver:
+gcc your_bot.c -L. -lconnect4 -lstdc++ -O2
