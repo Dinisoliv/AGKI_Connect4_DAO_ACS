@@ -59,6 +59,7 @@ int main(void) {
         }
     }
 
+    //Print final board / Save metrics in a file
     //Metrics m = metrics_get();
     //printf("Nodes expanded: %lld\n", m.nodes_expanded);
     //printf("Time: %.2f ms\n", m.time_ms);
