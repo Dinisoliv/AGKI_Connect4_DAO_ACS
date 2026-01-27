@@ -16,6 +16,17 @@ typedef struct {
   unsigned int moves;
 } Position;
 
+
+typedef struct {
+  unsigned long long nodeCount;
+  double time;
+} Metrics;
+//inicializes the metrics struct
+void metrics_init(Metrics *solver);
+
+//gets the node count from the metrics function
+unsigned long long metrics_getNodeCount(const Metrics *metrics);
+
 //inicializes the position
 void Position_init(Position *pos);
 

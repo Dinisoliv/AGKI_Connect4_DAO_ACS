@@ -1,6 +1,14 @@
 #include "GameCore.h"
 #include <stdio.h>
 
+void metrics_init(Metrics *metrics) {
+    metrics->nodeCount = 0;
+}
+
+unsigned long long metrics_getNodeCount(const Metrics *metrics){
+    return metrics->nodeCount;
+}
+
 void Position_init(Position *pos){
     for(int x = 0; x < WIDTH; x++){
         pos->height[x] = 0;

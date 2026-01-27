@@ -1,9 +1,9 @@
 #include "alphabeta.h"
 
 
-int alphabeta(Solver *solver, const Position *P, int depth, int alpha, int beta){
+int alphabeta(Metrics *metrics, const Position *P, int depth, int alpha, int beta){
 
-    solver->nodeCount++;
+    metrics->nodeCount++;
 
     //returns the heuristic result
     if(depth == 0){
@@ -29,7 +29,7 @@ int alphabeta(Solver *solver, const Position *P, int depth, int alpha, int beta)
             Position P2 = *P;          // STRUCT COPY (replaces copy constructor) 
             Position_play(&P2, x);     // opponent’s turn now 
 
-            int score = -alphabeta(solver, &P2, depth-1, -alpha, -beta);
+            int score = -alphabeta(metrics, &P2, depth-1, -alpha, -beta);
             if (score > bestScore){
                 bestScore = score;
             }
@@ -48,21 +48,21 @@ int alphabeta(Solver *solver, const Position *P, int depth, int alpha, int beta)
 }
 
 
-int alphabeta_move(Solver *solver, const Position *P, int depth){
+int alphabeta_move(Metrics *metrics, const Position *P, int depth){
     int bestMove = -1;
     int bestScore = -WIDTH * HEIGHT;
 
     int alpha = -WIDTH * HEIGHT;
     int beta = WIDTH * HEIGHT;
 
-    solver->nodeCount = 0;
+    metrics->nodeCount = 0;
 
     for (int x = 0; x < WIDTH; x++) {
         if (Position_canPlay(P, x)) {
             Position P2 = *P;
             Position_play(&P2, x);
 
-            int score = -alphabeta(solver, &P2, depth - 1, -alpha, -beta);
+            int score = -alphabeta(metrics, &P2, depth - 1, -alpha, -beta);
 
             if (score > bestScore) {
                 bestScore = score;
@@ -75,13 +75,4 @@ int alphabeta_move(Solver *solver, const Position *P, int depth){
         }
     }
     return bestMove;
-}
-
-
-unsigned long long alphabeta_getNodeCount(const Solver *solver){
-    return solver->nodeCount;
-}
-
-void alphabeta_init(Solver *solver) {
-    solver->nodeCount = 0;
 }

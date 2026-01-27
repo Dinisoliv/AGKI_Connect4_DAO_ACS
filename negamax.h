@@ -3,16 +3,6 @@
 
 #include "GameCore.h"
 
-typedef struct {
-    unsigned long long nodeCount;
-} Solver;
-
-
-void negamax_init(Solver *solver);//inicializes the solver structure
-
-int negamax_move(Solver *solver, const Position *P, int depth); //runs the algorithm/solver
-
-unsigned long long negamax_getNodeCount(const Solver *solver); // get function for nodeCount
-
+int negamax_move(Metrics *metrics, const Position *P, int depth); //runs the algorithm/solver
 
 #endif 

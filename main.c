@@ -8,10 +8,10 @@
 int main(void) {
 
     Position pos;
-    Solver solver;
+    Metrics metrics;
     
     Position_init(&pos);
-    negamax_init(&solver);
+    negamax_init(&metrics);
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
     //metrics_reset();
@@ -22,9 +22,9 @@ int main(void) {
         if(Position_nbMoves(&pos) %2 == 0){
 
             if (ALG == negamax){
-                move =  negamax_move(&solver, &pos, DEPTH);
+                move =  negamax_move(&metrics, &pos, DEPTH);
             }else if(ALG == alphabeta){
-                move = alphabeta_move(&solver, &pos, DEPTH);
+                move = alphabeta_move(&metrics, &pos, DEPTH);
             
             }else{
                 //add others;

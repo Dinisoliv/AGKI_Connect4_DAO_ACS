@@ -8,6 +8,7 @@
 #define OPPONENT random 
 
 #define negamax 1
+#define alphabeta 2
 #define ALG negamax 
 
 
