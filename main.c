@@ -11,7 +11,7 @@ int main(void) {
     Solver solver;
     
     Position_init(&pos);
-    Solver_init(&solver);
+    negamax_init(&solver);
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
     //metrics_reset();
@@ -23,6 +23,9 @@ int main(void) {
 
             if (ALG == negamax){
                 move =  negamax_move(&solver, &pos, DEPTH);
+            }else if(ALG == alphabeta){
+                move = alphabeta_move(&solver, &pos, DEPTH);
+            
             }else{
                 //add others;
                 printf("not a valid algorithm");
@@ -57,8 +60,8 @@ int main(void) {
     }
 
     //Metrics m = metrics_get();
-    printf("Nodes expanded: %lld\n", m.nodes_expanded);
-    printf("Time: %.2f ms\n", m.time_ms);
+    //printf("Nodes expanded: %lld\n", m.nodes_expanded);
+    //printf("Time: %.2f ms\n", m.time_ms);
 
     return 0;
 }
