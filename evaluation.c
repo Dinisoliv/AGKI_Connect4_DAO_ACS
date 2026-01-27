@@ -61,7 +61,7 @@ static int evaluate_windows(const Position *pos)
 {
     int score = 0;
 
-    /* Horizontal */
+    /* Horizontal (left-to-right) */
     for (int col = 0; col < WIDTH - 3; col++) {
         for (int row = 0; row < HEIGHT; row++) {
             int p = 0, o = 0;

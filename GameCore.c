@@ -1,4 +1,5 @@
 #include "GameCore.h"
+#include <stdio.h>
 
 void Position_init(Position *pos){
     for(int x = 0; x < WIDTH; x++){
@@ -74,4 +75,31 @@ bool Position_isWinningMove(const Position *pos, int col){
 
 unsigned int Position_nbMoves(const Position *pos){
     return pos->moves;  
+}
+
+void print_board(const Position *pos)
+{
+    for (int row = HEIGHT - 1; row >= 0; row--) {
+        printf("| ");
+        for (int col = 0; col < WIDTH; col++) {
+
+            if (row < pos->height[col]) {
+                if (pos->board[col][row] == 1)
+                    printf("X ");
+                else if (pos->board[col][row] == -1)
+                    printf("O ");
+                else
+                    printf(". ");  // safety fallback
+            } else {
+                printf(". ");
+            }
+        }
+        printf("|\n");
+    }
+
+    /* Column indices */
+    printf("  ");
+    for (int col = 0; col < WIDTH; col++)
+        printf("%d ", col);
+    printf("\n");
 }
