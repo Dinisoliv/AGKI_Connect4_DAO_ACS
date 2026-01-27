@@ -1,0 +1,69 @@
+#include "negamax.h"
+
+int negamax(Solver *solver, const Position *P, int depth){
+
+    solver->nodeCount++;
+
+    //returns the heuristic result
+    if(depth == 0){
+        return heuristic(P);
+    }
+    // Draw game
+    if (Position_nbMoves(P) == WIDTH * HEIGHT){
+        return 0;
+    }
+
+    // Check if current player can win next move
+    for (int x = 0; x < WIDTH; x++) {
+        if (Position_canPlay(P, x) && Position_isWinningMove(P, x)) {
+            return (WIDTH * HEIGHT + 1 - Position_nbMoves(P)) / 2;
+        }
+    }
+
+    int bestScore = -WIDTH * HEIGHT;
+
+    // Try all possible moves 
+    for (int x = 0; x < WIDTH; x++) {   
+        if (Position_canPlay(P, x)) {
+            Position P2 = *P;          // STRUCT COPY (replaces copy constructor) 
+            Position_play(&P2, x);     // opponent’s turn now 
+
+            int score = -negamax(solver, &P2, depth-1);
+            if (score > bestScore)
+                bestScore = score;
+        }
+    }
+
+    return bestScore;
+}
+
+
+int negamax_move(Solver *solver, const Position *P, int depth){
+    int bestMove = -1;
+    int bestScore = -WIDTH * HEIGHT;
+
+    solver->nodeCount = 0;
+
+    for (int x = 0; x < WIDTH; x++) {
+        if (Position_canPlay(P, x)) {
+            Position P2 = *P;
+            Position_play(&P2, x);
+
+            int score = -negamax(solver, &P2, depth - 1);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = x;
+            }
+        }
+    }
+    return bestMove;
+}
+
+
+unsigned long long negamax_getNodeCount(const Solver *solver){
+    return solver->nodeCount;
+}
+
+void negamax_init(Solver *solver) {
+    solver->nodeCount = 0;
+}
