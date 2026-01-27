@@ -1,12 +1,7 @@
 #include "evaluation.h"
 
-#define CENTER_WEIGHT 3
 #define TWO_IN_ROW    10
 #define THREE_IN_ROW  100
-
-#define PLAYER    1
-#define OPPONENT -1
-#define EMPTY     0
 
 static int score_window(int p_count, int o_count);
 static int evaluate_center(const Position *pos);
@@ -29,14 +24,24 @@ static int evaluate_center(const Position *pos)
     int score = 0;
 
     /* Progressive column weights (edges → center) */
-    static const int col_weights[WIDTH] = {1, 2, 3, 4, 3, 2, 1};
+    static const int col_weights[WIDTH] = {3, 4, 5, 7, 5, 4, 3};
+
+    int phase = pos->moves;   // number of moves played
+
+    int center_multiplier;
+    if (phase < 8)
+        center_multiplier = 3;   // opening
+    else if (phase < 20)
+        center_multiplier = 2;   // midgame
+    else
+        center_multiplier = 1;   // endgame
 
     for (int col = 0; col < WIDTH; col++) {
         for (int row = 0; row < pos->height[col]; row++) {
             if (pos->board[col][row] == PLAYER)
-                score += col_weights[col];
+                score += center_multiplier * col_weights[col];
             else if (pos->board[col][row] == OPPONENT)
-                score -= col_weights[col];
+                score -= center_multiplier * col_weights[col];
         }
     }
 
@@ -45,8 +50,6 @@ static int evaluate_center(const Position *pos)
 
 
 // Score a window of 4 cells
-// player_count: number of AI pieces in the window
-// opp_count: number of opponent pieces in the window
 static int score_window(int player_count, int opp_count)
 {
     if (player_count == 3 && opp_count == 0) return THREE_IN_ROW;

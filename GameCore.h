@@ -6,6 +6,10 @@
 #define WIDTH 7
 #define HEIGHT 6
 
+#define PLAYER    1
+#define OPPONENT -1
+#define EMPTY     0
+
 typedef struct {
   int board[WIDTH][HEIGHT];
   int height[WIDTH];

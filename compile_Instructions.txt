@@ -4,5 +4,5 @@ g++ -O3 -c Position.cpp Solver.cpp connect4_wrapper.cpp
 Create static library
 ar rcs libconnect4.a Position.o Solver.o connect4_wrapper.o
 
-Compile your C bot
+Compile your C bot #change for bot files organzization
 gcc your_bot.c -L. -lconnect4 -lstdc++ -O2
