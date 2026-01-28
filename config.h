@@ -4,12 +4,12 @@
 
 #define DEPTH 10
 
-#define random 1
-#define OPPONENT random 
+#define RANDOM 1
+#define OPP RANDOM 
 
-#define negamax 1
-#define alphabeta 2
-#define ALG negamax 
+#define NEGAMAX 1
+#define ALPHABETA 2
+#define ALG NEGAMAX 
 
 
 #endif

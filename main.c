@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "config.h"
 #include "GameCore.h"
@@ -11,7 +13,7 @@ int main(void) {
     Metrics metrics;
     
     Position_init(&pos);
-    negamax_init(&metrics);
+    metrics_init(&metrics);
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
     //metrics_reset();
@@ -21,9 +23,9 @@ int main(void) {
 
         if(Position_nbMoves(&pos) %2 == 0){
 
-            if (ALG == negamax){
+            if (ALG == NEGAMAX){
                 move =  negamax_move(&metrics, &pos, DEPTH);
-            }else if(ALG == alphabeta){
+            }else if(ALG == ALPHABETA){
                 move = alphabeta_move(&metrics, &pos, DEPTH);
             
             }else{
@@ -33,7 +35,7 @@ int main(void) {
             }
 
         }else{
-            if(OPPONENT == random){
+            if(OPP == RANDOM){
                 move = random_move(&pos);
             }else{
                 //add others
@@ -49,13 +51,13 @@ int main(void) {
 
         Position_play(&pos, move);
 
-        if (Position_checkWin(&pos, move)) {
+        if (Position_isWinningMove(&pos, move)) {
             printf("Player %d wins!\n", 1 + ((pos.moves - 1) % 2));
             break;
         }
         else if (Position_nbMoves(&pos) == WIDTH * HEIGHT) {
             printf("Draw!\n");
-            break;
+            break;    srand((unsigned int)time(NULL)); // Inicializes the rand function
         }
     }
 

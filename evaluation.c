@@ -9,7 +9,7 @@ static int evaluate_center(const Position *pos);
 static int evaluate_windows(const Position *pos);
 
 /* Public evaluation function */
-int evaluate_position(const Position *pos)
+int evaluate_board(const Position *pos)
 {
     int score = 0;
 
@@ -82,7 +82,7 @@ static int evaluate_windows(const Position *pos)
 next_h:;
         }
     }
-<
+
 
     /* Vertical */
     for (int col = 0; col < WIDTH; col++) {

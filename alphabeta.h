@@ -2,6 +2,7 @@
 #define ALPHABETA_H
 
 #include "GameCore.h"
+#include "evaluation.h"
 
 //runs the algorithm and returns the bestmove
 int alphabeta_move(Metrics *metrics, const Position *P, int depth); 

@@ -9,6 +9,10 @@ unsigned long long metrics_getNodeCount(const Metrics *metrics){
     return metrics->nodeCount;
 }
 
+double metrics_getTime(const Metrics *metrics){
+    return metrics->time;
+}
+
 void Position_init(Position *pos){
     for(int x = 0; x < WIDTH; x++){
         pos->height[x] = 0;
@@ -32,7 +36,7 @@ void Position_play(Position *pos, int col){
 }
 
 unsigned int Position_playSequence(Position *pos, const char *seq){
-    for(unsigned int i = 0; seq[i] != "\0"; i++){
+    for(unsigned int i = 0; seq[i] != '\0'; i++){
         int col = seq[i]- '1';
 
         //checks for invalid moves;

@@ -8,6 +8,7 @@
 
 #define PLAYER    1
 #define OPPONENT -1
+
 #define EMPTY     0
 
 typedef struct {

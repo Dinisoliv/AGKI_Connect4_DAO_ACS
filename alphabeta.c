@@ -1,6 +1,5 @@
 #include "alphabeta.h"
 
-
 int alphabeta(Metrics *metrics, const Position *P, int depth, int alpha, int beta){
 
     metrics->nodeCount++;

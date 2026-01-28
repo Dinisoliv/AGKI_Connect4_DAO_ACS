@@ -2,6 +2,8 @@
 #define EVALUATION_H
 
 #include "GameCore.h"
+#include "config.h"
+#include "limits.h"
 
 #define WIN_SCORE  INT_MAX
 #define LOSS_SCORE INT_MIN
