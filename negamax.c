@@ -1,34 +1,32 @@
 #include "negamax.h"
+#include "evaluation.h"
 
 int negamax(Metrics *metrics, const Position *P, int depth){
 
     metrics->nodeCount++;
 
-    //returns the heuristic result
-    if(depth == 0){
-        return heuristic(P);
-    }
     // Draw game
-    if (Position_nbMoves(P) == WIDTH * HEIGHT){
+    if (Position_nbMoves(P) == WIDTH * HEIGHT)
         return 0;
-    }
 
     // Check if current player can win next move
     for (int x = 0; x < WIDTH; x++) {
-        if (Position_canPlay(P, x) && Position_isWinningMove(P, x)) {
-            return (WIDTH * HEIGHT + 1 - Position_nbMoves(P)) / 2;
-        }
+        if (Position_canPlay(P, x) && Position_isWinningMove(P, x))
+            return WIN_SCORE - Position_nbMoves(P);
     }
 
-    int bestScore = -WIDTH * HEIGHT;
+    //returns the heuristic result
+    if (depth == 0)
+        return evaluate_board(P);
 
-    // Try all possible moves 
-    for (int x = 0; x < WIDTH; x++) {   
+    int bestScore = LOSS_SCORE;
+
+    for (int x = 0; x < WIDTH; x++) {
         if (Position_canPlay(P, x)) {
-            Position P2 = *P;          // STRUCT COPY (replaces copy constructor) 
-            Position_play(&P2, x);     // opponent’s turn now 
+            Position P2 = *P;
+            Position_play(&P2, x);
 
-            int score = -negamax(metrics, &P2, depth-1);
+            int score = -negamax(metrics, &P2, depth - 1);
             if (score > bestScore)
                 bestScore = score;
         }
@@ -36,7 +34,6 @@ int negamax(Metrics *metrics, const Position *P, int depth){
 
     return bestScore;
 }
-
 
 int negamax_move(Metrics *metrics, const Position *P, int depth){
     int bestMove = -1;
