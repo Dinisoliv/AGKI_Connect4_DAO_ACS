@@ -3,8 +3,6 @@
 
 #define TWO_IN_ROW    10
 #define THREE_IN_ROW  100
-#define WIN  INT_MAX
-#define LOSS INT_MIN
 
 static int score_window(int p_count, int o_count);
 static int evaluate_center(const Position *pos);

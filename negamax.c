@@ -37,7 +37,7 @@ int negamax(Metrics *metrics, const Position *P, int depth){
 
 int negamax_move(Metrics *metrics, const Position *P, int depth){
     int bestMove = -1;
-    int bestScore = -WIDTH * HEIGHT;
+    int bestScore = LOSS_SCORE;
 
     metrics->nodeCount = 0;
 
