@@ -3,6 +3,7 @@
 
 void metrics_init(Metrics *metrics) {
     metrics->nodeCount = 0;
+    metrics->time = 0.0;
 }
 
 unsigned long long metrics_getNodeCount(const Metrics *metrics){

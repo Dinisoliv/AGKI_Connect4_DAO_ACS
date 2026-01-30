@@ -6,6 +6,8 @@
 #include "GameCore.h"
 #include "negamax.h"
 #include "random.h"
+#include "elapsed_time.h"
+#include "helpers.h"
 
 int main(void) {
 
@@ -14,6 +16,8 @@ int main(void) {
     
     Position_init(&pos);
     metrics_init(&metrics);
+
+    double t1, t2;
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
     //metrics_reset();
@@ -24,10 +28,15 @@ int main(void) {
         if(Position_nbMoves(&pos) %2 == 0){
 
             if (ALG == NEGAMAX){
+                t1 = cpu_time();
                 move =  negamax_move(&metrics, &pos, DEPTH);
+                t2 = cpu_time();
+                metrics.time += t2 - t1;
             }else if(ALG == ALPHABETA){
+                t1 = cpu_time();
                 move = alphabeta_move(&metrics, &pos, DEPTH);
-            
+                t2 = cpu_time();
+                metrics.time += t2 - t1;
             }else{
                 //add others;
                 printf("not a valid algorithm");
@@ -52,7 +61,8 @@ int main(void) {
         Position_play(&pos, move);
 
         if (Position_isWinningMove(&pos, move)) {
-            printf("Player %d wins!\n", 1 + ((pos.moves - 1) % 2));
+            int winnerPlayer = 1 + ((pos.moves - 1) % 2);
+            printf("Player %d wins!\n", winnerPlayer);
             break;
         }
         else if (Position_nbMoves(&pos) == WIDTH * HEIGHT) {
@@ -63,8 +73,18 @@ int main(void) {
 
     //Print final board / Save metrics in a file
     //Metrics m = metrics_get();
-    //printf("Nodes expanded: %lld\n", m.nodes_expanded);
+    //printf("Nodes expanded: %lld\n", m.nodes_expanded);    
     //printf("Time: %.2f ms\n", m.time_ms);
+    
+    printf("Final board:\n");
+    print_board(&pos);
+    printf("Node count: %llu\n", metrics.nodeCount);
+    printf("CPU Time:  %.6f seconds\n", metrics.time);
+
+    write_result_to_csv("results.csv",
+                        1 + ((pos.moves - 1) % 2),
+                        metrics_getNodeCount(&metrics),
+                        metrics_getTime(&metrics));
 
     return 0;
 }
