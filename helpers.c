@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include "GameCore.h"
 #include <stdlib.h>
 
 void write_result_to_csv(const char *filename,

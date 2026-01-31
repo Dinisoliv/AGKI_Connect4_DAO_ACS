@@ -10,20 +10,23 @@
 #include "helpers.h"
 #include "alphabeta_tt.h"
 #include "alphabeta.h"
+#include "connect4_wrapper.h"
 
 int main(void) {
 
     Position pos;
     Metrics metrics;
+    c4_position_t pos_Op = c4_create();
     
     Position_init(&pos);
     metrics_init(&metrics);
+
+    pos_Op = c4_create();
 
     double t1, t2;
     int winnerPlayer = 0;
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
-    //metrics_reset();
 
     while (1) {
         int move;
@@ -33,28 +36,34 @@ int main(void) {
             if (ALG == NEGAMAX){
                 t1 = cpu_time();
                 move =  negamax_move(&metrics, &pos, DEPTH);
-                printf("%d\n", move);
+                t2 = cpu_time();
             }else if(ALG == ALPHABETA){
                 t1 = cpu_time();
                 move = alphabeta_move(&metrics, &pos, DEPTH);
-                printf("%d\n", move);
+                t2 = cpu_time();
             }else if(ALG == ALPHABETA_TT){
+                t1 = cpu_time();
                 alphabeta_tt_init();
                 move = alphabeta_tt_move(&metrics, &pos, DEPTH);
-                printf("%d\n", move);
+                t2 = cpu_time();
             }else{
                 //add others;
                 printf("not a valid algorithm");
                 break;
             }
 
+            metrics.time += (t2 - t1);
+            printf("%d\n", move);
+
         }else{
             if(OPP == RANDOM){
                 move = random_move(&pos);
-                printf("%d\n", move);
-            }else{
-                //add others
-                printf("not a valid opponent");
+            }else if (OPP == PERFECT) {   /* ← PascalPons */
+                move = c4_best_move(solver_pos);
+            }
+
+            else{
+                fprintf(stderr, "Invalid opponent\n");
                 break;
             }
         }
@@ -64,7 +73,10 @@ int main(void) {
             break;
         }
 
+        /* APPLY MOVE TO BOTH ENGINES */
         Position_play(&pos, move);
+        c4_play(solver_pos, move);
+        printf("%d\n", move);
 
         if (Position_isWinningMove(&pos, move)) {
             winnerPlayer = 1 + ((pos.moves - 1) % 2);
@@ -77,10 +89,7 @@ int main(void) {
         }
     }
 
-    //Print final board / Save metrics in a file
-    //Metrics m = metrics_get();
-    //printf("Nodes expanded: %lld\n", m.nodes_expanded);    
-    //printf("Time: %.2f ms\n", m.time_ms);
+    //Print final board / Save n print metrics in a file
     
     printf("Final board:\n");
     print_board(&pos);
@@ -91,6 +100,8 @@ int main(void) {
                         winnerPlayer,
                         metrics.nodeCount,
                         metrics.time);
+
+    c4_destroy(pos_Op);
 
     return 0;
 }

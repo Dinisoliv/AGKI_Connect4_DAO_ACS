@@ -5,6 +5,7 @@
 #define DEPTH 10
 
 #define RANDOM 1
+#define PERFECT 2
 #define OPP RANDOM 
 
 #define NEGAMAX 1
