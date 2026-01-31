@@ -1,6 +1,10 @@
 #include "connect4_wrapper.h"
+
 #include "Position.hpp"
 #include "Solver.hpp"
+
+using GameSolver::Connect4::Position;
+using GameSolver::Connect4::Solver;
 
 struct C4Wrapper {
     Position position;
@@ -8,7 +12,7 @@ struct C4Wrapper {
 
 extern "C" {
 
-c4_position_t c4_create(void) {
+c4_position_t c4_create() {
     return new C4Wrapper();
 }
 
@@ -28,10 +32,10 @@ void c4_play(c4_position_t pos, int col) {
 
 int c4_best_move(c4_position_t pos) {
     auto* p = static_cast<C4Wrapper*>(pos);
-    Solver solver;
 
-    int best_col   = -1;
-    int best_score = -1000;
+    Solver solver;
+    int best_col = -1;
+    int best_score = -100000;
 
     for (int col = 0; col < Position::WIDTH; col++) {
         if (!p->position.canPlay(col)) continue;
@@ -39,15 +43,12 @@ int c4_best_move(c4_position_t pos) {
         Position next = p->position;
         next.play(col);
 
-        int score = -solver.negamax(
-            next,
-            -Position::WIDTH * Position::HEIGHT,
-             Position::WIDTH * Position::HEIGHT
-        );
+        // Use the public API — negamax is private by design
+        int score = -solver.solve(next);
 
         if (score > best_score) {
             best_score = score;
-            best_col   = col;
+            best_col = col;
         }
     }
 
@@ -60,4 +61,4 @@ int c4_solve(c4_position_t pos) {
     return solver.solve(p->position);
 }
 
-} /* extern "C" */
+}

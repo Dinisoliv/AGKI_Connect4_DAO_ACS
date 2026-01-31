@@ -1,21 +1,11 @@
 Compile C++ sources
-g++ -O3 -c Position.cpp Solver.cpp connect4_wrapper.cpp
+g++ -O3 -std=c++17 -c Solver.cpp connect4_wrapper.cpp
 
 Create static library
-ar rcs libconnect4.a Position.o Solver.o connect4_wrapper.o
+ar rcs libconnect4.a Solver.o connect4_wrapper.o
 
 Compile your C bot sources
-gcc -O2 -c \
-  main.c \
-  GameCore.c \
-  alphabeta.c \
-  negamax.c \
-  evaluation.c \
-  random.c
-
+gcc -O2 -std=c11 -c *.c
 
 Link everything together
-gcc -O2 \
-  main.o GameCore.o alphabeta.o negamax.o evaluation.o random.o \
-  -L. -lconnect4 -lstdc++ \
-  -o connect4_bot
+gcc *.o -L. -lconnect4 -lstdc++ -o connect4_bot
