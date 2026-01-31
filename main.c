@@ -46,7 +46,7 @@ int main(void) {
                 alphabeta_tt_init();
                 move = alphabeta_tt_move(&metrics, &pos, DEPTH);
                 t2 = cpu_time();
-            }else if(ALG == ITERACTIVE){
+            }else if(ALG == ITERATIVE){
                 t1 = cpu_time();
                 alphabeta_tt_init();
                 move = iterative_deepening_move(&metrics, &pos, DEPTH);
@@ -56,8 +56,7 @@ int main(void) {
                 break;
             }
 
-            metrics.time += (t2 - t1);
-            printf("%d\n", move);
+            metrics.time += (t2 - t1);  
 
         }else{
             if(OPP == RANDOM){
@@ -82,7 +81,7 @@ int main(void) {
         c4_play(pos_Op, move);
         printf("%d\n", move);
 
-        if (Position_isWinningMove(&pos, move)) {
+        if (Position_checkWin(&pos, move)) {
             winnerPlayer = 1 + ((pos.moves - 1) % 2);
             printf("Player %d wins!\n", winnerPlayer);
             break;

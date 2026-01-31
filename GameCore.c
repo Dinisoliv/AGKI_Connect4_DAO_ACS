@@ -89,3 +89,42 @@ bool Position_isWinningMove(const Position *pos, int col){
 unsigned int Position_nbMoves(const Position *pos){
     return pos->moves;  
 }
+
+bool Position_checkWin(const Position *pos, int col) {
+    int last_player = 2 - (pos->moves % 2);  // player who just played
+    int row = pos->height[col] - 1;
+
+    // Vertical
+    int count = 1;
+    for (int y = row - 1; y >= 0 && pos->board[col][y] == last_player; y--)
+        count++;
+    if (count >= 4) return true;
+
+    // Horizontal and diagonals
+    const int dirs[3][2] = {
+        {1, 0},   // horizontal
+        {1, 1},   // diagonal /
+        {1, -1}   // other diagonal 
+    };
+
+    for (int d = 0; d < 3; d++) {
+        int dx = dirs[d][0];
+        int dy = dirs[d][1];
+        count = 1;
+
+        for (int s = -1; s <= 1; s += 2) {
+            int x = col + s * dx;
+            int y = row + s * dy;
+
+            while (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT &&
+                   pos->board[x][y] == last_player) {
+                count++;
+                x += s * dx;
+                y += s * dy;
+            }
+        }
+        if (count >= 4) return true;
+    }
+
+    return false;
+}

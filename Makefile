@@ -26,6 +26,7 @@ C_SRCS = \
 	random.c \
 	helpers.c \
 	alphabeta_tt.c \
+	iterative.c
 
 C_OBJS = $(C_SRCS:.c=.o)
 

@@ -137,6 +137,7 @@ static int alphabeta_tt(Metrics *metrics, const Position *P, int depth, int alph
         }
     }
     
+    //normal move order loop
     for (int x = 0; x < WIDTH; x++) {
         if(x == ttMove) continue;
         if(!Position_canPlay(P, x)) continue;
