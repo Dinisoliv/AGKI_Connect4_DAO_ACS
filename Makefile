@@ -1,26 +1,55 @@
+# ─────────────────────────────────────────────
+# Toolchain
+# ─────────────────────────────────────────────
 CC  = gcc
 CXX = g++
 AR  = ar
 
-CFLAGS   = -O2 -std=c11
-CXXFLAGS = -O3 -std=c++17
+# ─────────────────────────────────────────────
+# Flags
+# ─────────────────────────────────────────────
+CFLAGS   = -O2 -std=c11 -Wall -Wextra -D_POSIX_C_SOURCE=199309L
+CXXFLAGS = -O3 -std=c++17 -Wall -Wextra
+LDFLAGS  = -lstdc++
 
-# C sources (your bot)
-C_SRCS = main.c GameCore.c alphabeta.c negamax.c evaluation.c helpers.c random.c
+# ─────────────────────────────────────────────
+# Sources
+# ─────────────────────────────────────────────
+
+# C sources (your engine)
+C_SRCS = \
+	main.c \
+	GameCore.c \
+	alphabeta.c \
+	negamax.c \
+	evaluation.c \
+	random.c \
+	helpers.c \
+	alphabeta_tt.c \
+
 C_OBJS = $(C_SRCS:.c=.o)
 
-# C++ sources (solver + wrapper)
-CPP_SRCS = Solver.cpp connect4_wrapper.cpp
+# C++ sources (PascalPons solver + wrapper)
+CPP_SRCS = \
+	Solver.cpp \
+	connect4_wrapper.cpp
+
 CPP_OBJS = $(CPP_SRCS:.cpp=.o)
 
-TARGET = connect4
+# Output
+TARGET = connect4_bot
+LIB    = libconnect4.a
+
+# ─────────────────────────────────────────────
+# Build rules
+# ─────────────────────────────────────────────
 
 all: $(TARGET)
 
-$(TARGET): $(C_OBJS) libconnect4.a
-	$(CC) $(C_OBJS) -L. -lconnect4 -lstdc++ -o $(TARGET)
+$(TARGET): $(C_OBJS) $(LIB)
+	$(CC) $(C_OBJS) -L. -lconnect4 $(LDFLAGS) -o $@
 
-libconnect4.a: $(CPP_OBJS)
+$(LIB): $(CPP_OBJS)
 	$(AR) rcs $@ $^
 
 %.o: %.c
