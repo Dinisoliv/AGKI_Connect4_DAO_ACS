@@ -7,6 +7,9 @@
 
 #define TT_SIZE (1 << 20)
 
+static unsigned long long tt_hits = 0;
+static unsigned long long tt_probes = 0;
+
 typedef enum {
     TT_EMPTY,
     TT_EXACT,
@@ -40,9 +43,13 @@ static uint64_t position_hash(const Position *P) {
 
 void alphabeta_tt_init(void) {
     memset(table, 0, sizeof(table));
+    tt_hits = 0;    //saves how many times it hits the tt
+    tt_probes = 0;  //saves how many times it probes the tt
 }
 
 static int tt_probe(uint64_t key, int depth, int alpha, int beta, int *value) {
+    tt_probes++;
+
     TTEntry *e = &table[tt_index(key)];
 
     if (e->key != key || e->depth < depth)
@@ -50,14 +57,17 @@ static int tt_probe(uint64_t key, int depth, int alpha, int beta, int *value) {
 
     if (e->flag == TT_EXACT) {
         *value = e->value;
+        tt_hits++;
         return 1;
     }
     if (e->flag == TT_LOWER && e->value >= beta) {
         *value = e->value;
+        tt_hits++;
         return 1;
     }
     if (e->flag == TT_UPPER && e->value <= alpha) {
         *value = e->value;
+        tt_hits++;
         return 1;
     }
     return 0;
@@ -159,4 +169,14 @@ int alphabeta_tt_move(Metrics *metrics, const Position *P, int depth) {
         }
     }
     return bestMove;
+}
+
+//getters for the alphabeta transposition table hits and probes
+
+unsigned long long alphabeta_tt_hits(void) {
+    return tt_hits;
+}
+
+unsigned long long alphabeta_tt_probes(void) {
+    return tt_probes;
 }
