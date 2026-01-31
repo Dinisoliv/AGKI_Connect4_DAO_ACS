@@ -1,28 +1,28 @@
 #ifndef CONNECT4_WRAPPER_H
 #define CONNECT4_WRAPPER_H
 
-#include <stdint.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef void* c4_position_t;
+typedef struct c4_game* c4_game_t;
 
 /* lifecycle */
-c4_position_t c4_create(void);
-void c4_destroy(c4_position_t pos);
+c4_game_t c4_new_game(void);
+void c4_free_game(c4_game_t g);
 
-/* gameplay */
-int  c4_can_play(c4_position_t pos, int col);
-void c4_play(c4_position_t pos, int col);
+/* mirror external move */
+void c4_pascal_play(c4_game_t g, int col);
 
-/* solver */
-int c4_best_move(c4_position_t pos);
-int c4_solve(c4_position_t pos);
+/* Pascal chooses AND plays */
+int c4_pascal_best(c4_game_t g);
+
+/* queries */
+int c4_pascal_can_play(c4_game_t g, int col);
+int c4_pascal_is_terminal(c4_game_t g);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* CONNECT4_WRAPPER_H */
+#endif

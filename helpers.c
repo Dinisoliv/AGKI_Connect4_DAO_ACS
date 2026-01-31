@@ -4,7 +4,8 @@
 void write_result_to_csv(const char *filename,
                          int winnerPlayer,
                          unsigned long long nodeCount,
-                         double time)
+                         double time,
+                         double hit_rate)
 {
     FILE *file = fopen(filename, "a+");
     if (!file) {
@@ -17,13 +18,15 @@ void write_result_to_csv(const char *filename,
     long file_size = ftell(file);
 
     if (file_size == 0) {
-        fprintf(file, "winnerPlayer,nodeCount,time\n");
+        fprintf(file, "winnerPlayer,nodeCount,time,hit_rate\n");
     }
 
-    fprintf(file, "%d,%llu,%.6f\n",
+    fprintf(file, "%d,%llu,%.6f,%.2f\n",
             winnerPlayer,
             nodeCount,
-            time);
+            time,
+            hit_rate
+        );
 
     fclose(file);
 }

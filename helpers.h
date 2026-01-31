@@ -13,7 +13,8 @@
 void write_result_to_csv(const char *filename,
                          int winnerPlayer,
                          unsigned long long nodeCount,
-                         double time);
+                         double time, 
+                         double hit_rate);
 
 /* Print the board to stdout */
 void print_board(const Position *pos);
