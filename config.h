@@ -11,6 +11,7 @@
 #define NEGAMAX 1
 #define ALPHABETA 2
 #define ALPHABETA_TT 3
+#define ITERACTIVE 4
 #define ALG ALPHABETA_TT 
 
 

@@ -46,6 +46,11 @@ int main(void) {
                 alphabeta_tt_init();
                 move = alphabeta_tt_move(&metrics, &pos, DEPTH);
                 t2 = cpu_time();
+            }else if(ALG == ITERACTIVE){
+                t1 = cpu_time();
+                alphabeta_tt_init();
+                move = iterative_deepening_move(&metrics, &pos, DEPTH);
+                t2 = cpu_time();
             }else{
                 printf("not a valid algorithm");
                 break;

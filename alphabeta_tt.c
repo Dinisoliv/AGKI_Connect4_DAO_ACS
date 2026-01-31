@@ -21,7 +21,8 @@ typedef struct {
     uint64_t key;
     int depth;
     int value;
-    TTFlag flag;
+    TTFlag flag; //EXACT, LOWERBOUND, UPPERBOUND
+    int bestMove;
 } TTEntry;
 
 static TTEntry table[TT_SIZE];
@@ -73,12 +74,13 @@ static int tt_probe(uint64_t key, int depth, int alpha, int beta, int *value) {
     return 0;
 }
 
-static void tt_store(uint64_t key, int depth, int value, TTFlag flag) {
+static void tt_store(uint64_t key, int depth, int value, TTFlag flag, int bestMove) {
     TTEntry *e = &table[tt_index(key)];
     e->key = key;
     e->depth = depth;
     e->value = value;
     e->flag = flag;
+    e->bestMove = bestMove;
 }
 
 //_____________________________________
@@ -102,7 +104,7 @@ static int alphabeta_tt(Metrics *metrics, const Position *P, int depth, int alph
     for (int x = 0; x < WIDTH; x++) {
         if (Position_canPlay(P, x) && Position_isWinningMove(P, x)) {
             int win = WIN_SCORE - Position_nbMoves(P);
-            tt_store(key, depth, win, TT_EXACT);
+            tt_store(key, depth, win, TT_EXACT, x);
             return win;
         }
     }
@@ -112,30 +114,52 @@ static int alphabeta_tt(Metrics *metrics, const Position *P, int depth, int alph
 
     int bestScore = LOSS_SCORE;
     int alpha0 = alpha;
+    int bestMove = -1;
 
-    for (int x = 0; x < WIDTH; x++) {
-        if (Position_canPlay(P, x)) {
-            Position P2 = *P;
-            Position_play(&P2, x);
+    //tt move ordering
+    TTEntry *entry = &table[tt_index(key)];
+    int ttMove = (entry->key == key && entry->depth >= depth) ? entry->bestMove : -1;
 
-            int score = -alphabeta_tt(
-                metrics, &P2, depth - 1,
-                -beta, -alpha
-            );
-
-            if (score > bestScore)
-                bestScore = score;
-
-            if (bestScore > alpha)
-                alpha = bestScore;
-
-            if (alpha >= beta)
-                break;
+    if (ttMove != -1 && Position_canPlay(P, ttMove)) {
+        Position P2 = *P;
+        Position_play(&P2, ttMove);
+    
+        int score = -alphabeta_tt(metrics, &P2, depth-1, -beta, -alpha);
+    
+        bestScore = score;
+        bestMove = ttMove;
+        alpha = (score > alpha) ? score : alpha;
+    
+        if (alpha >= beta) {
+            //beta cutoff
+            tt_store(key, depth, bestScore, TT_LOWER, bestMove);
+            return bestMove;
         }
+    }
+    
+    for (int x = 0; x < WIDTH; x++) {
+        if(x == ttMove) continue;
+        if(!Position_canPlay(P, x)) continue;
+
+        Position P2 = *P;
+        Position_play(&P2, x);
+
+        int score = -alphabeta_tt(metrics, &P2, depth - 1, -beta, -alpha);
+
+        if (score > bestScore){
+            bestScore = score;
+            bestMove = x;
+        }
+        if (bestScore > alpha)
+            alpha = bestScore;
+
+        if (alpha >= beta)
+            break;
+        
     }
 
     TTFlag flag = (bestScore <= alpha0) ? TT_UPPER :(bestScore >= beta)   ? TT_LOWER : TT_EXACT;
-    tt_store(key, depth, bestScore, flag);
+    tt_store(key, depth, bestScore, flag, bestMove);
     return bestScore;
 }
 
