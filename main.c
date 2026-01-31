@@ -20,6 +20,7 @@ int main(void) {
     metrics_init(&metrics);
 
     double t1, t2;
+    int winnerPlayer = 0;
 
     srand((unsigned int)time(NULL)); // Inicializes the rand function
     //metrics_reset();
@@ -66,7 +67,7 @@ int main(void) {
         Position_play(&pos, move);
 
         if (Position_isWinningMove(&pos, move)) {
-            int winnerPlayer = 1 + ((pos.moves - 1) % 2);
+            winnerPlayer = 1 + ((pos.moves - 1) % 2);
             printf("Player %d wins!\n", winnerPlayer);
             break;
         }
@@ -87,9 +88,9 @@ int main(void) {
     printf("CPU Time:  %.6f seconds\n", metrics.time);
 
     write_result_to_csv("results.csv",
-                        1 + ((pos.moves - 1) % 2),
-                        metrics_getNodeCount(&metrics),
-                        metrics_getTime(&metrics));
+                        winnerPlayer,
+                        metrics.nodeCount,
+                        metrics.time);
 
     return 0;
 }

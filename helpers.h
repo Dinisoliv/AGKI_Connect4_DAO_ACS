@@ -13,4 +13,7 @@ void write_result_to_csv(const char *filename,
                          unsigned long long nodeCount,
                          double time);
 
+/* Print the board to stdout */
+void print_board(const Position *pos);
+
 #endif /* CSV_LOGGER_H */

@@ -46,7 +46,4 @@ bool Position_isWinningMove(const Position *pos, int col);
 /* Number of moves played */
 unsigned int Position_nbMoves(const Position *pos);
 
-/* Print the board to stdout */
-void print_board(const Position *pos);
-
 #endif /* POSITION_H */
