@@ -1,22 +1,27 @@
 CC  = gcc
 CXX = g++
+AR  = ar
 
-CFLAGS   = -O2
-CXXFLAGS = -O3
+CFLAGS   = -O2 -std=c11
+CXXFLAGS = -O3 -std=c++17
 
-C_SRCS = main.c GameCore.c alphabeta.c negamax.c evaluation.c random.c helpers.c 
+# C sources (your bot)
+C_SRCS = main.c GameCore.c alphabeta.c negamax.c evaluation.c helpers.c random.c
 C_OBJS = $(C_SRCS:.c=.o)
 
-CPP_SRCS = Position.cpp Solver.cpp connect4_wrapper.cpp
+# C++ sources (solver + wrapper)
+CPP_SRCS = Solver.cpp connect4_wrapper.cpp
 CPP_OBJS = $(CPP_SRCS:.cpp=.o)
 
-all: connect4_bot
+TARGET = connect4
 
-connect4_bot: $(C_OBJS) libconnect4.a
-	$(CC) $(C_OBJS) -L. -lconnect4 -lstdc++ -o $@
+all: $(TARGET)
+
+$(TARGET): $(C_OBJS) libconnect4.a
+	$(CC) $(C_OBJS) -L. -lconnect4 -lstdc++ -o $(TARGET)
 
 libconnect4.a: $(CPP_OBJS)
-	ar rcs $@ $^
+	$(AR) rcs $@ $^
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
@@ -25,4 +30,4 @@ libconnect4.a: $(CPP_OBJS)
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f *.o *.a connect4_bot
+	rm -f *.o *.a $(TARGET)
