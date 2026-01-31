@@ -27,4 +27,4 @@ Connect4 is a classic zero-sum game. This project implements:
 2.  Use the command make on the bash commandline.
 3.  Run the code using ./connect4_bot
 
-The code will run on the command line, showing the various metrics and the final position, as well as the player that one and all the moves. The metrics will be recorded on a csv file.
+The code will run on the command line, showing the various metrics and the final position, as well as the player that won and all the moves. The metrics will be recorded on a csv file.
