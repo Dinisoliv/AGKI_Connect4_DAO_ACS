@@ -47,7 +47,6 @@ int main(void) {
                 move = alphabeta_tt_move(&metrics, &pos, DEPTH);
                 t2 = cpu_time();
             }else{
-                //add others;
                 printf("not a valid algorithm");
                 break;
             }
@@ -59,7 +58,7 @@ int main(void) {
             if(OPP == RANDOM){
                 move = random_move(&pos);
             }else if (OPP == PERFECT) {   /* ← PascalPons */
-                move = c4_best_move(solver_pos);
+                move = c4_best_move(pos_Op);
             }
 
             else{
@@ -75,7 +74,7 @@ int main(void) {
 
         /* APPLY MOVE TO BOTH ENGINES */
         Position_play(&pos, move);
-        c4_play(solver_pos, move);
+        c4_play(pos_Op, move);
         printf("%d\n", move);
 
         if (Position_isWinningMove(&pos, move)) {
@@ -95,6 +94,10 @@ int main(void) {
     print_board(&pos);
     printf("Node count: %llu\n", metrics.nodeCount);
     printf("CPU Time:  %.6f seconds\n", metrics.time);
+    printf("TT probes: %llu\n", alphabeta_tt_probes());
+    printf("TT hits: %llu\n", alphabeta_tt_hits());
+    printf("TT hit rate: %.2f%%\n", 100.0 * alphabeta_tt_hits() / alphabeta_tt_probes());
+
 
     write_result_to_csv("results.csv",
                         winnerPlayer,

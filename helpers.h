@@ -2,6 +2,8 @@
 #define HELPERS_H
 
 #include <stdio.h>
+#include "GameCore.h"
+
 
 /**
  * Writes one result line to a CSV file.
